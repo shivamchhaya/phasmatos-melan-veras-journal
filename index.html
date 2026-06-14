@@ -3,336 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stefan's Journal | Phasmatos Melan Veras</title>
+    <title>Phasmatos Melan Veras</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=La+Belle+Aurore&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Pinyon+Script&display=swap" rel="stylesheet">
     <style>
         :root {
-            --desk: #0a0705;
-            --leather: #2a1b15;
-            --leather-dark: #1a0f0a;
-            --parchment: #e2d1b3;
-            --ink: #1c1a18;
-            --gold: #8e7e50;
+            --paper: #fdfcf8;
+            --environment: #0d0d0d;
+            --charcoal: #1a1a1a;
+            --ink: #1c1c1c;
+            --gold: #a68b5a;
+            --glass: rgba(255, 255, 255, 0.02);
+            --transition-smooth: all 1.2s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--desk);
-            /* Dark mahogany/wood desk texture */
-            background-image: 
-                radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.8) 100%),
-                url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            background-color: var(--environment);
+            color: var(--paper);
+            font-family: 'Cormorant Garamond', serif;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            perspective: 2000px;
+            perspective: 2500px;
         }
 
-        /* Ambient Lighting */
-        .shadow-overlay {
+        /* Architectural Backdrop */
+        .ambient-light {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 20% 20%, rgba(255, 147, 41, 0.05) 0%, transparent 50%);
+            background: radial-gradient(circle at 50% 40%, rgba(253, 252, 248, 0.03) 0%, transparent 70%);
             pointer-events: none;
-            z-index: 100;
+            z-index: 1;
         }
 
-        /* The Journal */
-        .book {
+        /* The Object: Editorial Journal */
+        .journal-object {
             position: relative;
-            width: 450px;
-            height: 600px;
-            transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+            width: 840px;
+            height: 560px;
+            background: var(--charcoal);
+            border-radius: 2px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
             transform-style: preserve-3d;
-            cursor: pointer;
-        }
-
-        .book.open {
-            transform: translateX(225px);
-        }
-
-        /* Cover & Pages */
-        .cover, .back-cover {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: var(--leather);
-            background-image: url('https://www.transparenttextures.com/patterns/leather.png');
-            border-radius: 4px 12px 12px 4px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
-            transform-origin: left;
-            transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transition: var(--transition-smooth);
             z-index: 10;
+        }
+
+        .journal-object.open {
+            transform: rotateX(2deg) translateY(-20px);
+            box-shadow: 0 60px 120px rgba(0,0,0,0.9);
+        }
+
+        /* Pages: Heavy Matte Paper */
+        .pages-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--paper);
+            display: flex;
+            overflow: hidden;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.02);
+        }
+
+        .page {
+            flex: 1;
+            padding: 80px;
+            position: relative;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .cover::after {
-            content: '';
-            position: absolute;
-            left: 15px; top: 0; bottom: 0; width: 2px;
-            background: rgba(0,0,0,0.3);
-            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-        }
-
-        .book.open .cover {
-            transform: rotateY(-180deg);
-        }
-
-        .crest {
-            width: 120px;
-            opacity: 0.6;
-            filter: sepia(1) saturate(0.5) brightness(0.8);
-            margin-bottom: 2rem;
-        }
-
-        .cover-title {
-            font-family: 'Cormorant Garamond', serif;
-            color: var(--gold);
-            text-transform: uppercase;
-            letter-spacing: 6px;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        /* Inner Pages */
-        .pages {
-            position: absolute;
-            width: 98%;
-            height: 96%;
-            top: 2%; left: 1%;
-            background: var(--parchment);
-            background-image: url('https://www.transparenttextures.com/patterns/old-paper.png');
-            box-shadow: inset 0 0 100px rgba(0,0,0,0.1);
-            display: flex;
-            transform-style: preserve-3d;
-        }
-
-        .page-left, .page-right {
-            flex: 1;
-            padding: 4rem 3rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .page-left {
-            border-right: 1px solid rgba(0,0,0,0.1);
-            background: linear-gradient(to right, transparent 90%, rgba(0,0,0,0.05) 100%);
-        }
-
-        .page-right {
-            background: linear-gradient(to left, transparent 90%, rgba(0,0,0,0.05) 100%);
-        }
-
-        /* Crease Shadow */
-        .spine-shadow {
+        /* The Gutter: Editorial Precision */
+        .gutter {
             position: absolute;
             left: 50%; top: 0; bottom: 0;
-            width: 40px;
+            width: 1px;
+            background: rgba(0,0,0,0.06);
+            transform: translateX(-50%);
+            z-index: 20;
+        }
+
+        .gutter-shadow {
+            position: absolute;
+            left: 50%; top: 0; bottom: 0;
+            width: 60px;
             transform: translateX(-50%);
             background: linear-gradient(to right, 
                 rgba(0,0,0,0) 0%, 
-                rgba(0,0,0,0.2) 50%, 
+                rgba(0,0,0,0.03) 50%, 
                 rgba(0,0,0,0) 100%);
-            z-index: 5;
+            pointer-events: none;
+            z-index: 19;
         }
 
-        /* Typography & Content */
-        .date-header {
+        /* UI Elements: Minimalist */
+        .label-tiny {
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--ink);
+            opacity: 0.3;
+            margin-bottom: 40px;
+        }
+
+        .input-silent {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
             font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
             font-size: 1.1rem;
+            font-style: italic;
             color: var(--ink);
-            opacity: 0.7;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
+            resize: none;
+            line-height: 1.8;
+            height: 100%;
         }
 
-        .writing-area {
-            font-family: 'Pinyon Script', cursive;
-            font-size: 2rem;
-            color: var(--ink);
-            line-height: 1.3;
-            min-height: 200px;
-            /* Incremental bleed effect helper */
-            position: relative;
-        }
-
-        /* Ghost Writing Effect */
-        .ink-bleed {
-            display: inline;
+        /* The Transformation View */
+        .stefan-view {
             opacity: 0;
-            animation: inkSink 0.8s forwards;
+            transition: opacity 2s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
-        @keyframes inkSink {
-            0% { opacity: 0; filter: blur(2px); transform: scale(1.05); }
-            100% { opacity: 0.9; filter: blur(0px); transform: scale(1); }
+        .stefan-view.active { opacity: 1; }
+
+        .date-line {
+            font-size: 0.8rem;
+            color: var(--ink);
+            opacity: 0.4;
+            margin-bottom: 2rem;
+            letter-spacing: 0.1em;
         }
 
-        /* Input Controls (Naturally Integrated) */
-        .ui-overlay {
-            position: fixed;
-            bottom: 5vh;
+        .ink-writing {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 1.8rem;
+            color: var(--ink);
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+
+        /* The Action: Wax Seal / Debossed Button */
+        .seal-container {
+            position: absolute;
+            bottom: 80px;
+            right: 80px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1.5rem;
-            z-index: 200;
-            transition: opacity 1s;
+            gap: 15px;
+            z-index: 100;
         }
 
-        .wax-seal-btn {
-            width: 80px; height: 80px;
-            background: #7a1515;
+        .seal-btn {
+            width: 44px; height: 44px;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: transparent;
             border-radius: 50%;
             cursor: pointer;
-            border: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.3);
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: transform 0.3s;
-            position: relative;
+            transition: var(--transition-smooth);
         }
 
-        .wax-seal-btn:hover { transform: scale(1.1) rotate(5deg); }
-
-        .wax-seal-btn::after {
-            content: 'S';
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.5rem;
-            color: rgba(255,255,255,0.2);
-            font-weight: bold;
+        .seal-btn:hover {
+            border-color: var(--gold);
+            transform: translateY(-2px);
         }
 
-        .modern-input {
-            width: 400px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: var(--parchment);
-            padding: 1rem;
-            font-family: 'Cormorant Garamond', serif;
-            border-radius: 4px;
-            outline: none;
-            text-align: center;
-            font-size: 1.1rem;
+        .seal-btn::after {
+            content: '';
+            width: 8px; height: 8px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 50%;
+            transition: var(--transition-smooth);
         }
 
-        .spell-text {
-            font-family: 'Cormorant Garamond', serif;
-            color: var(--gold);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            opacity: 0.6;
+        .seal-btn:hover::after {
+            background: var(--gold);
+            box-shadow: 0 0 10px var(--gold);
         }
 
-        /* Hidden initially */
-        .hidden { opacity: 0; pointer-events: none; }
+        /* Ink Flow Animation */
+        .ink-word {
+            display: inline;
+            opacity: 0;
+            filter: blur(4px);
+            transform: translateY(2px);
+            transition: opacity 1.5s ease, filter 2s ease, transform 1.5s ease;
+        }
+
+        .ink-word.visible {
+            opacity: 0.9;
+            filter: blur(0px);
+            transform: translateY(0);
+        }
+
+        .hidden { display: none !important; }
+
+        /* The Shadow Sweep */
+        .shadow-sweep {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--environment);
+            z-index: 50;
+            transform: translateX(-100%);
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .sweep-active {
+            transform: translateX(100%);
+        }
 
     </style>
 </head>
 <body>
-    <div class="shadow-overlay"></div>
-
-    <div id="journal-book" class="book">
-        <!-- Back Cover -->
-        <div class="back-cover" style="transform: translateZ(-1px);"></div>
-        
-        <!-- Inner Pages -->
-        <div class="pages">
-            <div class="spine-shadow"></div>
-            <div class="page-left">
-                <div class="date-header" id="current-date"></div>
-                <div id="stefan-writing" class="writing-area"></div>
+    <div class="ambient-light"></div>
+    
+    <div id="journal" class="journal-object">
+        <div id="sweep" class="shadow-sweep"></div>
+        <div class="pages-container">
+            <div class="gutter"></div>
+            <div class="gutter-shadow"></div>
+            
+            <!-- Page Left -->
+            <div class="page">
+                <div id="input-controls">
+                    <div class="label-tiny">Confess</div>
+                    <textarea id="thought-input" class="input-silent" placeholder="Silence your mind and write..."></textarea>
+                </div>
+                <div id="stefan-view-left" class="stefan-view hidden">
+                    <div class="date-line" id="date-el"></div>
+                    <div id="ink-output-left" class="ink-writing"></div>
+                </div>
             </div>
-            <div class="page-right">
-                <div class="writing-area" id="stefan-writing-cont"></div>
+
+            <!-- Page Right -->
+            <div class="page">
+                <div id="stefan-view-right" class="stefan-view hidden">
+                    <div id="ink-output-right" class="ink-writing"></div>
+                </div>
+                
+                <div id="action-ui" class="seal-container">
+                    <div class="label-tiny" style="margin-bottom: 0;">Cast</div>
+                    <button id="cast-btn" class="seal-btn"></button>
+                </div>
             </div>
         </div>
-
-        <!-- Front Cover -->
-        <div class="cover" id="book-cover">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/S_initial.svg/1200px-S_initial.svg.png" class="crest" alt="Salvatore Crest">
-            <span class="cover-title">The Journal of Stefan Salvatore</span>
-        </div>
-    </div>
-
-    <div id="controls" class="ui-overlay">
-        <input type="text" id="raw-input" class="modern-input" placeholder="Confess your thoughts...">
-        <div class="spell-text">Phasmatos Melan Veras</div>
-        <button id="seal-btn" class="wax-seal-btn"></button>
     </div>
 
     <script>
-        const book = document.getElementById('journal-book');
-        const sealBtn = document.getElementById('seal-btn');
-        const controls = document.getElementById('controls');
-        const input = document.getElementById('raw-input');
-        const writingArea = document.getElementById('stefan-writing');
-        const dateEl = document.getElementById('current-date');
-
+        const castBtn = document.getElementById('cast-btn');
+        const sweep = document.getElementById('sweep');
+        const journal = document.getElementById('journal');
+        const inputControls = document.getElementById('input-controls');
+        const actionUi = document.getElementById('action-ui');
+        const stefanViews = document.querySelectorAll('.stefan-view');
+        const dateEl = document.getElementById('date-el');
+        const outputLeft = document.getElementById('ink-output-left');
+        
         const prefixes = [
-            "I shouldn't be writing this, but the weight of the day is heavy. ",
-            "The centuries change, yet the shadows in this house remain the same. ",
-            "I find myself staring at the ink, wondering if it's the only truth left. ",
-            "Another day of pretending, another night of reality. "
+            "I have spent a lifetime running from the shadows, only to find them waiting in the ink. ",
+            "The weight of the years is silent tonight, yet I can hear every heartbeat in this house. ",
+            "I write these words not for forgiveness, but because the silence is no longer enough. ",
+            "There is a darkness in the Salvatore name that no amount of time can ever truly wash away. "
         ];
 
-        async function ghostWrite(text, element) {
+        async function flowInk(text, container) {
             const words = text.split(' ');
             for (let word of words) {
                 const span = document.createElement('span');
-                span.className = 'ink-bleed';
+                span.className = 'ink-word';
                 span.innerText = word + ' ';
-                element.appendChild(span);
-                await new Promise(r => setTimeout(r, 150 + Math.random() * 200));
+                container.appendChild(span);
+                
+                // Force reflow
+                span.offsetHeight; 
+                
+                setTimeout(() => span.classList.add('visible'), 50);
+                await new Promise(r => setTimeout(r, 200 + Math.random() * 200));
             }
         }
 
-        sealBtn.addEventListener('click', async () => {
-            const raw = input.value.trim();
+        castBtn.addEventListener('click', async () => {
+            const raw = document.getElementById('thought-input').value.trim();
             if (!raw) return;
 
-            // 1. Hide Controls
-            controls.classList.add('hidden');
-
-            // 2. Open Book
-            book.classList.add('open');
-
-            // 3. Prepare Date
-            const now = new Date();
-            dateEl.innerText = now.toLocaleDateString('en-US', { 
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
-            });
-
-            // 4. Construct Stefan's thought
-            const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-            const stylized = raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase().replace(/\./g, "...");
-            const fullEntry = prefix + stylized + "\n\n- S.";
-
-            // 5. Start Ghost Writing after book opens
+            // 1. Shadow Sweep Transition
+            sweep.classList.add('sweep-active');
+            
             setTimeout(() => {
-                ghostWrite(fullEntry, writingArea);
-            }, 1600);
-        });
+                // 2. Structural Overhaul
+                inputControls.classList.add('hidden');
+                actionUi.classList.add('hidden');
+                journal.classList.add('open');
+                
+                stefanViews.forEach(v => {
+                    v.classList.remove('hidden');
+                    v.classList.add('active');
+                });
 
-        // Toggle open/close for curiosity
-        book.addEventListener('click', () => {
-            if (book.classList.contains('open') && writingArea.innerText !== "") {
-                // Keep it open if we've written
-            } else {
-                // Optional: allow manual previewing
-            }
+                // 3. Date & Logic
+                const now = new Date();
+                dateEl.innerText = now.toLocaleDateString('en-US', { 
+                    year: 'numeric', month: 'long', day: 'numeric' 
+                }).toUpperCase();
+
+                const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+                const stylized = raw.toLowerCase().replace(/\./g, "...");
+                const fullEntry = prefix + stylized + "\n\n— S.";
+
+                // 4. Ghost Ink Flow
+                flowInk(fullEntry, outputLeft);
+                
+            }, 750);
         });
     </script>
 </body>
