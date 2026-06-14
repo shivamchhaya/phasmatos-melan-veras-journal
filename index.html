@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phasmatos Melan Veras - Stefan's Journal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English+SC&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0806;
+            --parchment: #c2b280;
+            --parchment-dark: #8e7e50;
+            --ink: #1a1a1a;
+            --glow: rgba(255, 140, 0, 0.4);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at center, #1a1510 0%, #0a0806 100%);
+            color: var(--parchment);
+            font-family: 'IM Fell English SC', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .ambient-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 20%, var(--glow) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 80%, var(--glow) 0%, transparent 40%);
+            pointer-events: none;
+            opacity: 0.5;
+            animation: flicker 4s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.5; }
+            100% { opacity: 0.4; }
+        }
+
+        .journal-container {
+            width: 90%;
+            max-width: 800px;
+            background: #d4c4a8;
+            background-image: url('https://www.transparenttextures.com/patterns/old-map.png');
+            padding: 50px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 100px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            position: relative;
+            border-left: 15px solid #2a1b15;
+            transform: rotate(-1deg);
+            transition: all 0.5s ease;
+        }
+
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            color: #2a1b15;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px dashed rgba(0,0,0,0.3);
+            font-family: 'IM Fell English SC', serif;
+            font-size: 1.2rem;
+            color: var(--ink);
+            resize: none;
+            outline: none;
+            padding: 10px;
+        }
+
+        .spell-button {
+            align-self: center;
+            background: #2a1b15;
+            color: var(--parchment);
+            border: 1px solid var(--parchment-dark);
+            padding: 15px 40px;
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .spell-button:hover {
+            background: #4a342a;
+            box-shadow: 0 0 20px var(--glow);
+            transform: scale(1.05);
+        }
+
+        #output-entry {
+            margin-top: 40px;
+            font-family: 'Pinyon Script', cursive;
+            font-size: 1.8rem;
+            color: var(--ink);
+            line-height: 1.6;
+            opacity: 0;
+            transition: opacity 2s ease-in;
+            min-height: 100px;
+            white-space: pre-wrap;
+        }
+
+        .mystical-smoke {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        @keyframes spell-flash {
+            0% { opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0; }
+        }
+
+        .cast-active {
+            animation: spell-flash 1.5s ease-out;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="ambient-light"></div>
+    <div class="journal-container">
+        <h1>Stefan Salvatore</h1>
+        <div class="input-section">
+            <textarea id="raw-thoughts" placeholder="Type your raw, modern thoughts here..."></textarea>
+            <button class="spell-button" onclick="castSpell()">Phasmatos Melan Veras</button>
+        </div>
+        <div id="mystical-smoke" class="mystical-smoke"></div>
+        <div id="output-entry"></div>
+    </div>
+
+    <script>
+        function castSpell() {
+            const input = document.getElementById('raw-thoughts').value;
+            const output = document.getElementById('output-entry');
+            const smoke = document.getElementById('mystical-smoke');
+
+            if (!input.trim()) return;
+
+            // Visual effects
+            smoke.classList.add('cast-active');
+            setTimeout(() => smoke.classList.remove('cast-active'), 1500);
+
+            // Transformation logic
+            const transformed = transformToStefanStyle(input);
+
+            output.style.opacity = 0;
+            setTimeout(() => {
+                output.innerText = transformed;
+                output.style.opacity = 1;
+            }, 1000);
+        }
+
+        function transformToStefanStyle(text) {
+            const prefixes = [
+                "I shouldn't be writing this, but I can't keep it inside. ",
+                "The weight of the years is heavy tonight. ",
+                "I find myself staring at the shadows again, wondering... ",
+                "The blood lust is a constant hum, but today, my mind is elsewhere. "
+            ];
+
+            const suffixes = [
+                "\n\n- Stefan",
+                "\n\nI have to believe there's hope for me yet.",
+                "\n\nSome things are better left in the past.",
+                "\n\nTomorrow is another day to try and be a better man."
+            ];
+
+            // Simple style transformation
+            let stylized = text.toLowerCase()
+                .replace(/\b(i)\b/g, "I")
+                .replace(/\b(im|i'm)\b/g, "I am")
+                .replace(/\b(don't|dont)\b/g, "do not")
+                .replace(/\b(can't|cant)\b/g, "cannot")
+                .replace(/\b(u|you)\b/g, "you")
+                .replace(/\!/g, ".");
+
+            const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+            const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+
+            return prefix + stylized + suffix;
+        }
+    </script>
+</body>
+</html>
