@@ -6,286 +6,292 @@
     <title>Phasmatos Melan Veras | Stefan's Journal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=La+Belle+Aurore&family=Playfair+Display:ital,wght@0,400;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300&family=La+Belle+Aurore&family=Pinyon+Script&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #050403;
-            --leather: #1a0f0a;
-            --parchment: #d4c4a8;
-            --ink: #1a1a1a;
-            --candle: rgba(255, 147, 41, 0.15);
-            --glass: rgba(255, 255, 255, 0.05);
+            --desk-dark: #070504;
+            --wood-grain: #1a120b;
+            --parchment-base: #e2d1b1;
+            --ink-black: #1c1917;
+            --shadow: rgba(0, 0, 0, 0.6);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--parchment);
-            font-family: 'Playfair Display', serif;
+            background-color: var(--desk-dark);
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(30, 20, 15, 0.4) 0%, transparent 100%),
+                url('https://www.transparenttextures.com/patterns/dark-wood.png');
             height: 100vh;
-            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+            perspective: 1500px;
         }
 
-        /* Atmospheric Background */
-        .ambient-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, transparent 0%, var(--bg-dark) 80%);
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        .candle-flicker {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--candle);
-            pointer-events: none;
-            z-index: 2;
-            animation: flicker 5s infinite alternate;
-        }
-
-        @keyframes flicker {
-            0% { opacity: 0.1; }
-            20% { opacity: 0.15; }
-            40% { opacity: 0.08; }
-            60% { opacity: 0.12; }
-            80% { opacity: 0.18; }
-            100% { opacity: 0.1; }
-        }
-
-        .mist {
-            position: fixed;
-            width: 200%; height: 200%;
-            background-image: url('https://www.transparenttextures.com/patterns/fog.png');
-            top: -50%; left: -50%;
-            opacity: 0.15;
-            z-index: 1;
-            animation: drift 60s linear infinite;
-            pointer-events: none;
-        }
-
-        @keyframes drift {
-            from { transform: translate(0,0); }
-            to { transform: translate(10%, 10%); }
-        }
-
-        /* Main Container */
-        .journal-wrapper {
+        /* The Journal - Physical Object */
+        .journal {
             position: relative;
-            z-index: 10;
-            width: 90%;
-            max-width: 900px;
-            height: 80vh;
+            width: 900px;
+            height: 600px;
+            background: #2a1b15; /* Leather color */
+            border-radius: 4px 12px 12px 4px;
+            box-shadow: 
+                0 30px 60px -12px rgba(0,0,0,0.9),
+                0 18px 36px -18px rgba(0,0,0,0.5),
+                inset 0 0 40px rgba(0,0,0,0.4);
             display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            align-items: center;
+            padding: 10px;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        header h1 {
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: 2.5rem;
-            color: #8e7e50;
-            text-shadow: 0 0 15px rgba(142, 126, 80, 0.3);
-            letter-spacing: 4px;
-            text-align: center;
-        }
-
-        /* Liquid Glass Input */
-        .input-container {
-            width: 100%;
-            flex-grow: 1;
-            position: relative;
-            background: var(--glass);
-            backdrop-filter: blur(12px) saturate(150%);
-            -webkit-backdrop-filter: blur(12px) saturate(150%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
-            transition: opacity 1s ease;
-        }
-
-        textarea {
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--parchment);
-            font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
-            line-height: 1.8;
-            resize: none;
-        }
-
-        /* Spell Button */
-        .cast-btn {
-            background: transparent;
-            border: 1px solid #8e7e50;
-            color: #8e7e50;
-            padding: 1rem 3rem;
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            letter-spacing: 2px;
+        /* Pages Surface */
+        .page-container {
+            flex: 1;
+            background: var(--parchment-base);
+            background-image: url('https://www.transparenttextures.com/patterns/old-map.png');
+            display: flex;
+            box-shadow: inset 0 0 80px rgba(0,0,0,0.1);
             position: relative;
             overflow: hidden;
         }
 
-        .cast-btn:hover {
-            background: #8e7e50;
-            color: var(--bg-dark);
-            box-shadow: 0 0 30px rgba(142, 126, 80, 0.4);
-        }
-
-        /* Transformed Journal View */
-        .journal-entry {
+        /* Spine Crease */
+        .page-container::before {
+            content: '';
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: #d4c4a8;
-            background-image: url('https://www.transparenttextures.com/patterns/old-paper.png');
-            border-left: 20px solid #2a1b15;
-            border-radius: 4px;
-            padding: 3rem 4rem;
-            color: var(--ink);
-            display: none;
-            opacity: 0;
-            transition: opacity 2s ease;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.9);
-            overflow-y: auto;
+            left: 50%;
+            top: 0;
+            width: 40px;
+            height: 100%;
+            background: linear-gradient(to right, 
+                rgba(0,0,0,0.15) 0%, 
+                rgba(0,0,0,0) 45%, 
+                rgba(0,0,0,0) 55%, 
+                rgba(0,0,0,0.15) 100%);
+            transform: translateX(-50%);
+            z-index: 10;
+            pointer-events: none;
         }
 
-        .journal-entry.active {
-            display: block;
-            opacity: 1;
-            animation: fadeIn 2.5s ease forwards;
+        .left-page, .right-page {
+            flex: 1;
+            padding: 50px 60px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Tactile Elements */
+        .handwritten-lines {
+            position: absolute;
+            top: 50px; left: 60px; right: 60px; bottom: 50px;
+            background-image: linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px);
+            background-size: 100% 2.2rem;
+            pointer-events: none;
+        }
 
-        .journal-text {
+        /* Typography */
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 1.2rem;
+            color: var(--ink-black);
+            opacity: 0.6;
+            letter-spacing: 3px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .input-area {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            line-height: 2.2rem;
+            color: var(--ink-black);
+            resize: none;
+            z-index: 5;
+        }
+
+        /* The Spell Button - Vintage Wax Seal Style */
+        .spell-trigger {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            width: 60px;
+            height: 60px;
+            background: #7a1b15;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.5),
+                inset 0 2px 4px rgba(255,255,255,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 20;
+        }
+
+        .spell-trigger::after {
+            content: 'S';
+            font-family: 'Cinzel Decorative', cursive;
+            color: rgba(255,255,255,0.4);
+            font-size: 1.5rem;
+        }
+
+        .spell-trigger:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Output View */
+        .output-content {
             font-family: 'Pinyon Script', cursive;
             font-size: 2.2rem;
-            line-height: 1.4;
+            line-height: 2.2rem;
+            color: var(--ink-black);
+            opacity: 0;
+            transition: opacity 3s ease;
             white-space: pre-wrap;
+            z-index: 5;
         }
 
-        .entry-header {
-            font-family: 'Playfair Display', serif;
+        .date-header {
+            font-family: 'Cormorant Garamond', serif;
             font-style: italic;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-            padding-bottom: 0.5rem;
             font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--ink-black);
+            opacity: 0.7;
         }
 
-        /* Spell Transition Overlay */
-        .spell-flash {
-            position: fixed;
+        /* Ink Bleed Animation */
+        .ink-overlay {
+            position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: white;
-            z-index: 100;
+            background: #000;
+            z-index: 50;
+            mix-blend-mode: multiply;
             opacity: 0;
             pointer-events: none;
         }
 
-        .flash-active {
-            animation: flashAnim 1.5s ease-out;
+        @keyframes inkBleed {
+            0% { opacity: 0; }
+            30% { opacity: 0.9; }
+            100% { opacity: 0; }
         }
 
-        @keyframes flashAnim {
-            0% { opacity: 0; }
-            20% { opacity: 0.8; }
-            100% { opacity: 0; }
+        .bleed-active {
+            animation: inkBleed 2s forwards;
+        }
+
+        .hidden { display: none; }
+
+        /* Ambient Lighting */
+        .vignette {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 100%);
+            pointer-events: none;
+            z-index: 100;
         }
 
     </style>
 </head>
 <body>
-    <div class="ambient-overlay"></div>
-    <div class="candle-flicker"></div>
-    <div class="mist"></div>
-    <div id="spell-flash" class="spell-flash"></div>
+    <div class="vignette"></div>
+    <div id="ink-bleed" class="ink-overlay"></div>
 
-    <div class="journal-wrapper">
-        <header>
-            <h1>Phasmatos Melan Veras</h1>
-        </header>
-
-        <div id="input-view" class="input-container">
-            <textarea id="thought-input" placeholder="Confess your thoughts to the shadows..."></textarea>
+    <main class="journal">
+        <div class="page-container">
+            <div class="left-page">
+                <div class="handwritten-lines"></div>
+                <h1>Phasmatos Melan Veras</h1>
+                <textarea id="raw-thoughts" class="input-area" placeholder="Write your truth here..."></textarea>
+            </div>
+            
+            <div class="right-page">
+                <div class="handwritten-lines"></div>
+                <div id="output-view" class="hidden">
+                    <div class="date-header" id="current-date"></div>
+                    <div id="stefan-text" class="output-content"></div>
+                </div>
+                
+                <button id="spell-btn" class="spell-trigger" title="Cast Spell"></button>
+            </div>
         </div>
-
-        <div id="journal-view" class="journal-entry">
-            <div class="entry-header" id="current-date"></div>
-            <div id="transformed-text" class="journal-text"></div>
-        </div>
-
-        <button id="cast-btn" class="cast-btn">Cast Spell</button>
-    </div>
+    </main>
 
     <script>
-        const castBtn = document.getElementById('cast-btn');
-        const inputView = document.getElementById('input-view');
-        const journalView = document.getElementById('journal-view');
-        const flash = document.getElementById('spell-flash');
-        const output = document.getElementById('transformed-text');
+        const spellBtn = document.getElementById('spell-btn');
+        const rawInput = document.getElementById('raw-thoughts');
+        const outputView = document.getElementById('output-view');
+        const stefanText = document.getElementById('stefan-text');
         const dateEl = document.getElementById('current-date');
+        const inkBleed = document.getElementById('ink-bleed');
 
-        const stefanQuotes = [
-            "I should not be writing this, but the silence of the boarding house is too much to bear tonight. ",
-            "The centuries bleed together, yet every choice I've made feels like it happened only yesterday. ",
-            "I look into the mirror and I wonder who is looking back. The man I want to be, or the monster I've tried to bury. ",
-            "Mystic Falls has a way of drawing out the secrets we try hardest to hide. "
+        const prefixes = [
+            "The truth is, I don't know how much longer I can pretend. ",
+            "I look into the mirror and I wonder who is looking back. ",
+            "Every heartbeat feels like a debt I haven't paid. ",
+            "Mystic Falls has a way of drawing out the darkest parts of us. "
         ];
 
-        const stefanClosers = [
-            "\n\nI have to believe there is a way back to the light. I have to.",
-            "\n\nTomorrow, I will try to be better. For Elena. For myself.",
-            "\n\nSome secrets are meant to stay buried, but the ink never lies.",
-            "\n\n- Stefan"
+        const closers = [
+            "\n\nI have to believe there is still hope for me.",
+            "\n\nSome things are better left in the past.",
+            "\n\nTomorrow is another day to try and be a better man.",
+            "\n\n- S. Salvatore"
         ];
 
-        castBtn.addEventListener('click', () => {
-            const rawText = document.getElementById('thought-input').value;
-            if (!rawText.trim()) return;
+        spellBtn.addEventListener('click', () => {
+            const input = rawInput.value;
+            if (!input.trim()) return;
 
-            // Date Formatting
-            const now = new Date();
-            dateEl.innerText = now.toLocaleDateString('en-US', { 
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
-            });
+            // Trigger Ink Bleed Transition
+            inkBleed.classList.add('bleed-active');
 
-            // Trigger Spell Transition
-            flash.classList.add('flash-active');
-            
             setTimeout(() => {
-                flash.classList.remove('flash-active');
-                inputView.style.display = 'none';
-                castBtn.style.display = 'none';
+                // Set Date
+                const now = new Date();
+                dateEl.innerText = now.toLocaleDateString('en-US', { 
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+                });
+
+                // Style the text
+                const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+                const closer = closers[Math.floor(Math.random() * closers.length)];
                 
-                // Transformation logic
-                const prefix = stefanQuotes[Math.floor(Math.random() * stefanQuotes.length)];
-                const closer = stefanClosers[Math.floor(Math.random() * stefanClosers.length)];
-                
-                // Emulate Stefan's brooding tone
-                let processed = rawText
-                    .replace(/\b(i|I)'m\b/g, "I am")
-                    .replace(/\b(i|I)'ve\b/g, "I have")
-                    .replace(/\b(can't|cant)\b/g, "cannot")
-                    .replace(/\b(don't|dont)\b/g, "do not")
+                // Processing for brooding tone
+                let processed = input.toLowerCase()
+                    .replace(/\b(i)\b/g, "I")
+                    .replace(/\b(i'm|im)\b/g, "I am")
+                    .replace(/\b(i've|ive)\b/g, "I have")
                     .replace(/\./g, "...");
 
-                output.innerText = prefix + processed + closer;
-                journalView.classList.add('active');
-            }, 750);
+                stefanText.innerText = prefix + processed + closer;
+                
+                // Toggle Views
+                rawInput.classList.add('hidden');
+                document.querySelector('h1').classList.add('hidden');
+                outputView.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    stefanText.style.opacity = 1;
+                    spellBtn.style.display = 'none';
+                }, 100);
+
+            }, 1000);
+
+            setTimeout(() => {
+                inkBleed.classList.remove('bleed-active');
+            }, 2500);
         });
     </script>
 </body>
